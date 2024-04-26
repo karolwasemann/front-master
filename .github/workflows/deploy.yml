@@ -5,9 +5,9 @@ env:
 on:
   workflow_dispatch:
     inputs:
-      deploy-netlify:
+      deploy-Vercel:
         type: boolean
-        description: Enable Netlify deployment
+        description: Enable Vercel deployment
         default: true
 jobs:
   Deploy-Production:
