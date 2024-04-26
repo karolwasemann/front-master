@@ -3,26 +3,26 @@ env:
   VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
   VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
 on:
-  workflow_dispatch:
-    inputs:
-      deploy-Vercel:
-        type: boolean
-        description: Enable Vercel deployment
-        default: true
+  push:
+    branches:
+      - master
+
 jobs:
   Deploy-Production:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
       - name: Install Vercel CLI
-        if: ${{ inputs.deploy-vercel }}
         run: npm install --global vercel@canary
+
+      - name: lint code
+        run: npm run lint
+
       - name: Pull Vercel Environment Information
         run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
-        if: ${{ inputs.deploy-vercel }}
+
       - name: Build Project Artifacts
-        if: ${{ inputs.deploy-vercel }}
         run: vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
+
       - name: Deploy Project Artifacts to Vercel
-        if: ${{ inputs.deploy-vercel }}
         run: vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }}
